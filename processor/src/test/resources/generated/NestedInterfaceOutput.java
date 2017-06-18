@@ -5,6 +5,7 @@ import io.deloop.tools.references.replay.internal.Invocation;
 import java.lang.Override;
 
 public final class SampleNestedInterface_ReplayReference extends BaseReplayReferenceImpl<SampleOuter.SampleNested.SampleNestedInterface> implements SampleOuter.SampleNested.SampleNestedInterface {
+
     @Override
     public void doOnce() {
         // If target is present, forward and return

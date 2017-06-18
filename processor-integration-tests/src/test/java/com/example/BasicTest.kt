@@ -101,4 +101,15 @@ class BasicTest {
             verify(target).doOnceB(argTwo, argThree)
         }
     }
+
+    @Test fun shouldClearTarget() {
+        with(reference) {
+            setTarget(target)
+            clearTarget()
+
+            get().doOnceA()
+        }
+
+        verify(target, never()).doOnceA()
+    }
 }

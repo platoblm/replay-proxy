@@ -9,28 +9,30 @@ import org.junit.Test
 class ValidationTest {
 
     @Test fun shouldSucceedForValidInterface() {
-        assertThatFor("ValidInterface.java").succeededWithoutWarnings()
+        compiling("ValidInterface.java").succeededWithoutWarnings()
     }
 
     @Test fun shouldFailWhenTooManyMethodsAnnotatedAsReplayAlways() {
-        assertThatFor("TooManyReplayAlways.java")
+        compiling("TooManyReplayAlways.java")
                 .hadErrorContaining("Interface has too many methods annotated with")
     }
 
     @Test fun shouldFailWhenClassAnnotated() {
-        assertThatFor("InvalidAnnotatedType.java").hadErrorContaining("can only be applied to interfaces")
+        compiling("InvalidAnnotatedType.java")
+                .hadErrorContaining("can only be applied to interfaces")
     }
 
     @Test fun shouldFailWhenReturnTypeIsInvalid() {
-        assertThatFor("InvalidReturnType.java").hadErrorContaining("Has non-void method")
-    }
-
-    @Test fun shouldFailWhenInheritedMethodReturnTypeIsInvalid() {
-        assertThatFor("InvalidInheritedMethodA.java", "InvalidInheritedMethodB.java")
+        compiling("InvalidReturnType.java")
                 .hadErrorContaining("Has non-void method")
     }
 
-    private fun assertThatFor(vararg files: String): CompilationSubject {
+    @Test fun shouldFailWhenInheritedMethodReturnTypeIsInvalid() {
+        compiling("InvalidInheritedMethodA.java", "InvalidInheritedMethodB.java")
+                .hadErrorContaining("Has non-void method")
+    }
+
+    private fun compiling(vararg files: String): CompilationSubject {
         val javaObjects = files
                 .map { "validation/$it" }
                 .map { JavaFileObjects.forResource(it) }

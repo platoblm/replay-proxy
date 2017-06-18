@@ -3,10 +3,8 @@ import org.gradle.script.lang.kotlin.gradleScriptKotlin
 import org.gradle.script.lang.kotlin.kotlinModule
 import org.gradle.script.lang.kotlin.repositories
 
-val kotlinVersion = "1.1.2-5"
-
 val commonDependencies = mapOf(
-        "kotlinStdLib" to "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+        "kotlinStdLib" to "org.jetbrains.kotlin:kotlin-stdlib:1.1.2-5",
         "mockito" to "org.mockito:mockito-core:2.3.7",
         "assertj" to "org.assertj:assertj-core:3.6.1",
         "junit" to "junit:junit:4.12"
@@ -25,14 +23,7 @@ allprojects {
 
     commonDependencies.forEach { extra[it.key] = it.value }
 
-    buildscript {
-        repositories { gradleScriptKotlin() }
-        dependencies { classpath(kotlinModule("gradle-plugin")) }
-    }
-
     repositories {
         mavenCentral()
-        jcenter()
-        gradleScriptKotlin()
     }
 }

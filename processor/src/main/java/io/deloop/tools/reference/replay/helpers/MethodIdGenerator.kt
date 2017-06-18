@@ -8,9 +8,7 @@ interface MethodIdGenerator {
 
     companion object {
         val real: MethodIdGenerator = object : MethodIdGenerator {
-            override fun uniqueId(methodName: String): String {
-                return methodName + "-" + randomUUID().toString()
-            }
+            override fun uniqueId(methodName: String) = methodName + "-" + randomUUID().toString()
         }
     }
 }

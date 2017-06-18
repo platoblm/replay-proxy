@@ -7,6 +7,7 @@ import java.lang.Override;
 import java.lang.String;
 
 public final class Sample_ReplayReference extends BaseReplayReferenceImpl<Sample> implements Sample {
+
     @Override
     public void doAlways(final Boolean state) {
         // If target is present, forward

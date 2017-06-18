@@ -5,6 +5,7 @@ import io.deloop.tools.references.replay.internal.Invocation;
 import java.lang.Override;
 
 public final class SampleTop_ReplayReference extends BaseReplayReferenceImpl<SampleTop> implements SampleTop {
+
     @Override
     public void doOnceTop() {
         // If target is present, forward and return
