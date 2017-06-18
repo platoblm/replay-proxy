@@ -10,13 +10,11 @@ public final class Sample_ReplayReference extends BaseReplayReferenceImpl<Sample
 
     @Override
     public void doAlways(final Boolean state) {
-        // If target is present, forward
         Sample target = targetRef.get();
         if (target != null) {
             target.doAlways(state);
         }
 
-        // Record invocation - it will always be replayed when a target is set.
         recordForAlways(new Invocation<Sample>() {
             @Override
             public void replayOn(Sample futureTarget) {
@@ -27,14 +25,12 @@ public final class Sample_ReplayReference extends BaseReplayReferenceImpl<Sample
 
     @Override
     public void doOnce(final String arg) {
-        // If target is present, forward and return
         Sample target = targetRef.get();
         if (target != null) {
             target.doOnce(arg);
             return;
         }
 
-        // Record invocation to be replayed later, and override previous calls of the same method
         final String methodId = "doOnce";
         recordForOnce(methodId, new Invocation<Sample>() {
             @Override
@@ -46,14 +42,12 @@ public final class Sample_ReplayReference extends BaseReplayReferenceImpl<Sample
 
     @Override
     public void doOnceB() {
-        // If target is present, forward and return
         Sample target = targetRef.get();
         if (target != null) {
             target.doOnceB();
             return;
         }
 
-        // Record invocation to be replayed later, and override previous calls of the same method
         final String methodId = "doOnceB";
         recordForOnce(methodId, new Invocation<Sample>() {
             @Override

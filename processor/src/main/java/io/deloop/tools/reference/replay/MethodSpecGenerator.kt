@@ -26,7 +26,6 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
 
     private fun forwardToPaentSpec(): MethodSpec.Builder {
         val returnIfForwarded = !replayAlways
-        val comment = "Forward to target if present" + if (returnIfForwarded) "and return" else ""
 
         return MethodSpec
                 .methodBuilder(method.simpleName.toString())
@@ -34,7 +33,6 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
                 .addModifiers(PUBLIC)
                 .returns(TypeName.VOID)
                 .addParameters(parameters)
-                .addComment(comment)
                 .addStatement("\$T target = targetRef.get()", inputInterface)
                 .beginControlFlow("if (target != null)")
                 .addStatement("target.\$L(\$L)", method.simpleName, argumentsList())
@@ -58,10 +56,8 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
             addCode("\n")
 
             if (replayAlways) {
-                addComment("Record invocation - it will always be replayed when a target is set.")
                 addStatement("recordForAlways(\$L)", invocation)
             } else {
-                addComment("Record invocation to be replayed later, and override previous calls of the same method")
                 addStatement("final String methodId = \$S", uniqueMethodId())
                 addStatement("recordForOnce(methodId, \$L)", invocation)
             }

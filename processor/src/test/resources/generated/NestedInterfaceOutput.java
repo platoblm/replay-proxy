@@ -8,14 +8,12 @@ public final class SampleNestedInterface_ReplayReference extends BaseReplayRefer
 
     @Override
     public void doOnce() {
-        // If target is present, forward and return
         SampleOuter.SampleNested.SampleNestedInterface target = targetRef.get();
         if (target != null) {
             target.doOnce();
             return;
         }
 
-        // Record invocation to be replayed later, and override previous calls of the same method
         final String methodId = "doOnce";
         recordForOnce(methodId, new Invocation<SampleOuter.SampleNested.SampleNestedInterface>() {
             @Override
