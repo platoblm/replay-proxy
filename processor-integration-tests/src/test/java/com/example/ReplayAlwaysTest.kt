@@ -50,5 +50,4 @@ class ReplayAlwaysTest {
         verify(second).doAlways(arg)
         verify(second, never()).doOnceA()
     }
-
 }

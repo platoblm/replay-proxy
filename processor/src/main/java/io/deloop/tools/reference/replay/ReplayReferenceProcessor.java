@@ -20,7 +20,6 @@ import static java.util.Collections.singletonList;
 @AutoService(Processor.class)
 public class ReplayReferenceProcessor extends AbstractProcessor {
 
-    // Visible for testing
     public static ReplayReferenceProcessor forTests(MethodIdGenerator methodIdGenerator) {
         return new ReplayReferenceProcessor(methodIdGenerator);
     }
