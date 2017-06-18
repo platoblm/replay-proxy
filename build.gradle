@@ -1,0 +1,7 @@
+buildscript {
+    ext {
+        kotlin_version = '1.1.2-4'
+        mockito_version = "2.3.7"
+        assertj_version = "3.6.1"
+    }
+}
