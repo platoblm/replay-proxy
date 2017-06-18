@@ -43,6 +43,12 @@ The created reference:
 - Records and replays only the last invocation of each method.
 - Always replays the last invocation of the method that is annotated with ReplayAlways (optional).
 
+Android Proguard
+----------------
+Add this to your proguard-rules file
+    
+    -keep class **ReplayReference { *; }
+
 
 License
 -------
