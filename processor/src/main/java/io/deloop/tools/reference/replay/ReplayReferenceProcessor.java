@@ -32,7 +32,7 @@ public class ReplayReferenceProcessor extends AbstractProcessor {
     private final MethodIdGenerator idGenerator;
 
     public ReplayReferenceProcessor() {
-        this(MethodIdGenerator.REAL);
+        this(MethodIdGenerator.Companion.getReal());
     }
 
     private ReplayReferenceProcessor(MethodIdGenerator idGenerator) {

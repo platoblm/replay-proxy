@@ -6,7 +6,7 @@ import com.google.testing.compile.Compiler.javac
 import com.google.testing.compile.JavaFileObjects
 import org.junit.Test
 
-class ProcessorValidationTest {
+class ValidationTest {
 
     @Test fun shouldSucceedForValidInterface() {
         assertThatFor("ValidInterface.java").succeededWithoutWarnings()
@@ -18,7 +18,7 @@ class ProcessorValidationTest {
     }
 
     @Test fun shouldFailWhenClassAnnotated() {
-        assertThatFor("InvalidAnnotatedType.java").hadErrorContaining("Is not an interface.")
+        assertThatFor("InvalidAnnotatedType.java").hadErrorContaining("can only be applied to interfaces")
     }
 
     @Test fun shouldFailWhenReturnTypeIsInvalid() {
