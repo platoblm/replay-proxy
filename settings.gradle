@@ -1,1 +1,2 @@
-include 'runtime'
+include 'runtime', 'processor', 'processor-integration-tests'
+
