@@ -12,7 +12,7 @@ def description() {
     project.ext.get("publishing.description")
 }
 
-def webUrl = "https://github.com/platoblm/replay-reference"
+def webUrl = "https://github.com/platoblm/replay-proxy"
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -82,7 +82,7 @@ bintray {
         name = artifactName()
         desc = description()
         websiteUrl = webUrl
-        vcsUrl = 'https://github.com/platoblm/replay-reference.git'
+        vcsUrl = 'https://github.com/platoblm/replay-proxy.git'
         licenses = ['Unlicense']
         publicDownloadNumbers = true
         version {

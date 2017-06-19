@@ -1,13 +1,13 @@
-Replay Reference
-----------------
+Replay Proxy
+------------
 
-[![circleci](https://circleci.com/gh/platoblm/replay-reference.svg?style=shield)](https://circleci.com/gh/platoblm/replay-reference)
-[![codecov.io](http://codecov.io/github/platoblm/replay-reference/coverage.svg)](https://codecov.io/gh/platoblm/replay-reference)
+[![circleci](https://circleci.com/gh/platoblm/replay-proxy.svg?style=shield)](https://circleci.com/gh/platoblm/replay-proxy)
+[![codecov.io](http://codecov.io/github/platoblm/replay-proxy/coverage.svg)](https://codecov.io/gh/platoblm/replay-proxy)
 
-An annotation processor, that given an interface creates a reference that makes the following succeed:
+An annotation processor, that given an interface creates a proxy that makes the following succeed:
 
 ```
-@ReplayProxy
+@HasReplayProxy
 interface Example {
 
     @ReplayAlways
@@ -19,18 +19,18 @@ interface Example {
 @Mock Example first;
 @Mock Example second;
 
-Reference<Example> reference = ReplayProxyFactory.createFor(Example.class)
+ReplayProxy<Example> proxy = ReplayProxyFactory.createFor(Example.class)
 
 @Test public void shouldReplayCalls() {
-      reference.get().doOnce();
+      proxy.get().doOnce();
 
-      reference.setTarget(first);
+      proxy.setTarget(first);
       verify(first).doOnce();
 
-      reference.get().doAlways("loading");
+      proxy.get().doAlways("loading");
       verify(first).doAlways("loading");
 
-      reference.setTarget(second);
+      proxy.setTarget(second);
       verify(second).doAlways("loading");
       verify(second, never()).doOnce();
 }
@@ -38,7 +38,7 @@ Reference<Example> reference = ReplayProxyFactory.createFor(Example.class)
 
 [Read this](compiler-integration-tests/src/test/java/com/example/BasicTest.kt) for more details: 
 
-The created reference:
+The created proxy:
 - Forwards method invocations to its target if one is present.
 - Records invocations if the target is missing, and replays them later, when a target is set.
 - Exposes a proxy and never the target itself.

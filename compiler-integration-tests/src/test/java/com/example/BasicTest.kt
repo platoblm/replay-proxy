@@ -15,14 +15,14 @@ class BasicTest {
     @Mock lateinit var first: Example
     @Mock lateinit var second: Example
 
-    val reference = ReplayProxyFactory.createFor(Example::class.java)
+    val proxy = ReplayProxyFactory.createFor(Example::class.java)
 
     @Test fun shouldForwardCallsWhenTargetPresent() {
         val argOne = Any()
         val argTwo = Any()
-        reference.setTarget(target) // target set first
+        proxy.setTarget(target) // target set first
 
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceA()
             doOnceB(argOne)
             doOnceB(argTwo)
@@ -38,13 +38,13 @@ class BasicTest {
     @Test fun shouldReplayCallsWhenTargetSet() {
         val argOne = Any()
         val argTwo = Any()
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceA()
             doOnceB(argOne)
             doOnceB(argTwo)
         }
 
-        reference.setTarget(target) // target set afterwards
+        proxy.setTarget(target) // target set afterwards
 
         with(inOrder(target)) {
             verify(target).doOnceA()
@@ -55,12 +55,12 @@ class BasicTest {
 
 
     @Test fun shouldReplaySimpleMethodsOnce() {
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceA()
             doOnceB(Any())
         }
 
-        with(reference) {
+        with(proxy) {
             setTarget(first)
             setTarget(second)
         }
@@ -71,13 +71,13 @@ class BasicTest {
 
     @Test fun shouldUpdateInvocationOrderWhenCalledMultipleTimes() {
         val arg = Any()
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceA() // first call
             doOnceB(arg)
             doOnceA() // second call
         }
 
-        reference.setTarget(target)
+        proxy.setTarget(target)
 
         with(inOrder(target)) {
             verify(target).doOnceB(arg)
@@ -89,12 +89,12 @@ class BasicTest {
         val argOne = Any()
         val argTwo = Any()
         val argThree = 0
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceB(argOne)
             doOnceB(argTwo, argThree)
         }
 
-        reference.setTarget(target)
+        proxy.setTarget(target)
 
         with(inOrder(target)) {
             verify(target).doOnceB(argOne)
@@ -103,7 +103,7 @@ class BasicTest {
     }
 
     @Test fun shouldClearTarget() {
-        with(reference) {
+        with(proxy) {
             setTarget(target)
             clearTarget()
 

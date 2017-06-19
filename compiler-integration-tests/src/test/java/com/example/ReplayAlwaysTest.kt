@@ -13,17 +13,17 @@ class ReplayAlwaysTest {
     @Mock lateinit var first: Example
     @Mock lateinit var second: Example
 
-    val reference = ReplayProxyFactory.createFor(Example::class.java)
+    val proxy = ReplayProxyFactory.createFor(Example::class.java)
 
     @Test fun shouldAlwaysReplayMethod() {
         val arg = Any()
-        reference.setTarget(first)
-        with(reference.get()) {
+        proxy.setTarget(first)
+        with(proxy.get()) {
             doOnceA()
             doAlways(arg)
         }
 
-        reference.setTarget(second)
+        proxy.setTarget(second)
 
         with(inOrder(first)) {
             verify(first).doOnceA()
@@ -35,13 +35,13 @@ class ReplayAlwaysTest {
 
     @Test fun shouldReplayAlwaysMethodFirst() {
         val arg = Any()
-        with(reference.get()) {
+        with(proxy.get()) {
             doOnceA()
             doAlways(arg)
         }
 
-        reference.setTarget(first)
-        reference.setTarget(second)
+        proxy.setTarget(first)
+        proxy.setTarget(second)
 
         with(inOrder(first)){
             verify(first).doAlways(arg)

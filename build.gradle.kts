@@ -12,7 +12,7 @@ buildscript {
 }
 
 allprojects {
-    group = "io.deloop.tools.references.replay"
+    group = "io.deloop.tools.proxy"
     version = "0.2"
 
     commonDependencies.forEach { extra[it.key] = it.value }
