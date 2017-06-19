@@ -17,9 +17,12 @@ allprojects {
 
     commonDependencies.forEach { extra[it.key] = it.value }
 
-    repositories { jcenter() }
+    repositories {
+        jcenter()
+    }
 }
 
+applyFrom("coverage.gradle")
 
 // to deploy run  ./gradlew clean build bintrayPublishAll
 tasks {
