@@ -24,7 +24,7 @@ allprojects {
 // to deploy run  ./gradlew clean build bintrayPublishAll
 tasks {
     "bintrayPublishAll" {
-        listOf("processor", "runtime").forEach {
+        listOf("compiler", "runtime").forEach {
             dependsOn(":$it:bintrayUpload")
         }
     }

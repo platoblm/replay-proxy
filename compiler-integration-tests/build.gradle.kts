@@ -5,7 +5,7 @@ apply {
 
 dependencies {
     compile(project(":runtime"))
-    kapt(project(":processor"))
+    kapt(project(":compiler"))
 
     listOf(extra["dependencies.junit"],
             extra["dependencies.mockito"],
@@ -13,4 +13,3 @@ dependencies {
             extra["dependencies.kotlinStdLib"])
             .forEach { testCompile(it) }
 }
-

@@ -1,2 +1,1 @@
-include 'runtime', 'processor', 'processor-integration-tests'
-
+include 'runtime', 'compiler', 'compiler-integration-tests'
