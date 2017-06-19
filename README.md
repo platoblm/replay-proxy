@@ -1,6 +1,9 @@
 Replay Reference
 ----------------
 
+[![circleci](https://circleci.com/gh/platoblm/replay-reference.svg?style=shield)](https://circleci.com/gh/platoblm/replay-reference)
+[![codecov.io](http://codecov.io/github/platoblm/replay-reference/coverage.svg)](https://codecov.io/gh/platoblm/replay-reference)
+
 An annotation processor, that given an interface creates a reference that makes the following succeed:
 
 ```
