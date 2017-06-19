@@ -1,9 +1,9 @@
-package io.deloop.tools.reference.replay
+package io.deloop.tools.proxy.specs
 
 import com.squareup.javapoet.*
-import io.deloop.tools.reference.replay.helpers.MethodIdGenerator
-import io.deloop.tools.references.replay.ReplayReferenceFactory.GENERATED_CLASS_SUFFIX
-import io.deloop.tools.references.replay.internal.BaseReplayReferenceImpl
+import io.deloop.tools.proxy.ReplayProxyFactory.GENERATED_CLASS_SUFFIX
+import io.deloop.tools.proxy.helpers.MethodIdGenerator
+import io.deloop.tools.proxy.internal.BaseImpl
 import java.io.IOException
 import java.util.*
 import javax.annotation.processing.Filer
@@ -17,8 +17,8 @@ import javax.lang.model.util.ElementFilter.methodsIn
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
 
-internal class TypeGenerator(input: Element, private val elements: Elements, private val types: Types,
-                             private val filer: Filer, private val methodIdGenerator: MethodIdGenerator) {
+internal class TypeSpecGenerator(input: Element, private val elements: Elements, private val types: Types,
+                                 private val filer: Filer, private val methodIdGenerator: MethodIdGenerator) {
 
     private val inputInterface = input as TypeElement // the annotated interface
 
@@ -26,7 +26,7 @@ internal class TypeGenerator(input: Element, private val elements: Elements, pri
         val newClassName = inputInterface.simpleName.toString() + GENERATED_CLASS_SUFFIX
 
         val inputTypeName = TypeName.get(inputInterface.asType())
-        val parentClassName = ClassName.get(BaseReplayReferenceImpl::class.java)
+        val parentClassName = ClassName.get(BaseImpl::class.java)
 
         val typeSpec = TypeSpec.classBuilder(newClassName)
                 .addModifiers(PUBLIC, FINAL)

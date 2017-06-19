@@ -1,4 +1,4 @@
-package io.deloop.tools.reference.replay
+package io.deloop.tools.proxy
 
 import com.google.testing.compile.CompilationSubject
 import com.google.testing.compile.CompilationSubject.assertThat
@@ -38,7 +38,7 @@ class ValidationTest {
                 .map { JavaFileObjects.forResource(it) }
 
         return assertThat(javac()
-                .withProcessors(ReplayReferenceProcessor())
+                .withProcessors(ReplayProxyProcessor())
                 .compile(javaObjects))
     }
 }

@@ -1,4 +1,4 @@
-package io.deloop.tools.references.replay;
+package io.deloop.tools.proxy;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,5 +8,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Target({TYPE})
 @Retention(CLASS)
-public @interface ReplayReference {
+public @interface HasReplayProxy {
 }

@@ -1,12 +1,12 @@
-package io.deloop.tools.references.replay.internal;
+package io.deloop.tools.proxy.internal;
 
-import io.deloop.tools.references.replay.Reference;
+import io.deloop.tools.proxy.ReplayProxy;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class BaseReplayReferenceImpl<T> implements Reference<T> {
+public abstract class BaseImpl<T> implements ReplayProxy<T> {
 
     private static final WeakReference EMPTY = new WeakReference(null);
 

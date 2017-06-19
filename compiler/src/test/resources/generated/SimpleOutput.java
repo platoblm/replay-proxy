@@ -1,12 +1,12 @@
 package com.example;
 
-import io.deloop.tools.references.replay.internal.BaseReplayReferenceImpl;
-import io.deloop.tools.references.replay.internal.Invocation;
+import io.deloop.tools.proxy.internal.BaseImpl;
+import io.deloop.tools.proxy.internal.Invocation;
 import java.lang.Boolean;
 import java.lang.Override;
 import java.lang.String;
 
-public final class Sample_ReplayReference extends BaseReplayReferenceImpl<Sample> implements Sample {
+public final class Sample_ReplayProxy extends BaseImpl<Sample> implements Sample {
 
     @Override
     public void doAlways(final Boolean state) {

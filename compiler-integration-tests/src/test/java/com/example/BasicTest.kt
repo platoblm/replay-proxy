@@ -1,6 +1,6 @@
 package com.example
 
-import io.deloop.tools.references.replay.ReplayReferenceFactory
+import io.deloop.tools.proxy.ReplayProxyFactory
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
@@ -15,7 +15,7 @@ class BasicTest {
     @Mock lateinit var first: Example
     @Mock lateinit var second: Example
 
-    val reference = ReplayReferenceFactory.createFor(Example::class.java)
+    val reference = ReplayProxyFactory.createFor(Example::class.java)
 
     @Test fun shouldForwardCallsWhenTargetPresent() {
         val argOne = Any()

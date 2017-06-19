@@ -1,7 +1,7 @@
-import io.deloop.tools.references.replay.ReplayAlways;
-import io.deloop.tools.references.replay.ReplayReference;
+import io.deloop.tools.proxy.ReplayAlways;
+import io.deloop.tools.proxy.HasReplayProxy;
 
-@ReplayReference
+@HasReplayProxy
 interface TooManyReplayAlways {
 
     @ReplayAlways

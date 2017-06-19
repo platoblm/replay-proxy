@@ -1,13 +1,12 @@
-package io.deloop.tools.reference.replay
+package io.deloop.tools.proxy.specs
 
 import com.google.auto.common.MoreElements.isAnnotationPresent
 import com.squareup.javapoet.*
 import com.squareup.javapoet.MethodSpec.Builder
-import io.deloop.tools.reference.replay.helpers.MethodIdGenerator
-import io.deloop.tools.references.replay.ReplayAlways
-import io.deloop.tools.references.replay.internal.Invocation
+import io.deloop.tools.proxy.ReplayAlways
+import io.deloop.tools.proxy.helpers.MethodIdGenerator
+import io.deloop.tools.proxy.internal.Invocation
 import javax.lang.model.element.ExecutableElement
-import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.TypeElement
@@ -24,7 +23,7 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
                 .apply { addRecordBlock(this) }
                 .build()
 
-    private fun forwardToPaentSpec(): MethodSpec.Builder {
+    private fun forwardToPaentSpec(): Builder {
         val returnIfForwarded = !replayAlways
 
         return MethodSpec
@@ -46,7 +45,7 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
                 .addSuperinterface(ParameterizedTypeName.get(invocationName, inputInterface))
                 .addMethod(MethodSpec.methodBuilder("replayOn")
                         .addAnnotation(Override::class.java)
-                        .addModifiers(Modifier.PUBLIC)
+                        .addModifiers(PUBLIC)
                         .addParameter(inputInterface, "futureTarget")
                         .addStatement("futureTarget.\$L(\$L)", method.simpleName, argumentsList())
                         .build())

@@ -1,8 +1,9 @@
-package io.deloop.tools.reference.replay;
+package io.deloop.tools.proxy;
 
 import com.google.auto.service.AutoService;
-import io.deloop.tools.reference.replay.helpers.MethodIdGenerator;
-import io.deloop.tools.references.replay.ReplayReference;
+import io.deloop.tools.proxy.helpers.MethodIdGenerator;
+import io.deloop.tools.proxy.specs.TypeSpecGenerator;
+import io.deloop.tools.proxy.validation.Validator;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -18,10 +19,10 @@ import java.util.Set;
 import static java.util.Collections.singletonList;
 
 @AutoService(Processor.class)
-public class ReplayReferenceProcessor extends AbstractProcessor {
+public class ReplayProxyProcessor extends AbstractProcessor {
 
-    public static ReplayReferenceProcessor forTests(MethodIdGenerator methodIdGenerator) {
-        return new ReplayReferenceProcessor(methodIdGenerator);
+    public static ReplayProxyProcessor forTests(MethodIdGenerator methodIdGenerator) {
+        return new ReplayProxyProcessor(methodIdGenerator);
     }
 
     private Types types;
@@ -30,11 +31,11 @@ public class ReplayReferenceProcessor extends AbstractProcessor {
     private Messager messager;
     private final MethodIdGenerator idGenerator;
 
-    public ReplayReferenceProcessor() {
+    public ReplayProxyProcessor() {
         this(MethodIdGenerator.Companion.getReal());
     }
 
-    private ReplayReferenceProcessor(MethodIdGenerator idGenerator) {
+    private ReplayProxyProcessor(MethodIdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
 
@@ -48,14 +49,14 @@ public class ReplayReferenceProcessor extends AbstractProcessor {
 
     @Override public boolean process(Set<? extends TypeElement> set, RoundEnvironment environment) {
         for (Element el : findRelevantInterfaces(environment)) {
-            new TypeGenerator(el, elements, types, filer, idGenerator)
+            new TypeSpecGenerator(el, elements, types, filer, idGenerator)
                     .generateFile();
         }
         return true;
     }
 
     @Override public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(singletonList(ReplayReference.class.getCanonicalName()));
+        return new HashSet<>(singletonList(HasReplayProxy.class.getCanonicalName()));
     }
 
     @Override public SourceVersion getSupportedSourceVersion() {
@@ -65,7 +66,7 @@ public class ReplayReferenceProcessor extends AbstractProcessor {
     private List<Element> findRelevantInterfaces(RoundEnvironment env) {
         List<Element> result = new ArrayList<>();
 
-        for (Element element : env.getElementsAnnotatedWith(ReplayReference.class)) {
+        for (Element element : env.getElementsAnnotatedWith(HasReplayProxy.class)) {
             if (new Validator(element, types, messager).validate()) {
                 result.add(element);
             }

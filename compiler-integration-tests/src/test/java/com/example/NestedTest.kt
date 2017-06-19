@@ -1,8 +1,8 @@
 package com.example
 
 import com.example.NestedExample.NestedInterface
-import io.deloop.tools.references.replay.Reference
-import io.deloop.tools.references.replay.ReplayReferenceFactory
+import io.deloop.tools.proxy.ReplayProxy
+import io.deloop.tools.proxy.ReplayProxyFactory
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,14 +17,14 @@ class NestedTest {
     @Mock lateinit var first: NestedInterface
     @Mock lateinit var second: NestedInterface
 
-    lateinit var reference: Reference<NestedInterface>
+    lateinit var proxy: ReplayProxy<NestedInterface>
 
     @Before fun setup() {
-        reference = ReplayReferenceFactory.createFor(NestedInterface::class.java)
+        proxy = ReplayProxyFactory.createFor(NestedInterface::class.java)
     }
 
     @Test fun shouldSupportNestedInterfaces() {
-        with(reference) {
+        with(proxy) {
             get().doOnce()
 
             setTarget(first)

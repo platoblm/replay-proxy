@@ -1,15 +1,14 @@
-package io.deloop.tools.reference.replay
+package io.deloop.tools.proxy.validation
 
 import com.google.auto.common.MoreElements.asExecutable
 import com.google.auto.common.MoreElements.isAnnotationPresent
 import com.google.auto.common.SuperficialValidation
-import io.deloop.tools.references.replay.ReplayAlways
-import io.deloop.tools.references.replay.ReplayReference
+import io.deloop.tools.proxy.HasReplayProxy
+import io.deloop.tools.proxy.ReplayAlways
 import java.lang.Exception
 import java.util.*
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
-import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ElementKind.INTERFACE
 import javax.lang.model.element.ElementKind.METHOD
 import javax.lang.model.type.TypeKind.VOID
@@ -38,7 +37,7 @@ internal class Validator(private val element: Element, private val types: Types,
 
     private fun checkIfInterface() {
         if (element.kind != INTERFACE) {
-            val annotation = ReplayReference::class.java.simpleName
+            val annotation = HasReplayProxy::class.java.simpleName
             error(element, "$annotation can only be applied to interfaces")
             fail()
         }
@@ -85,7 +84,7 @@ internal class Validator(private val element: Element, private val types: Types,
         // add methods of extended interfaces too
         for (tm in types.directSupertypes(element.asType())) {
             val el = types.asElement(tm)
-            if (el.kind == ElementKind.INTERFACE) {
+            if (el.kind == INTERFACE) {
                 result.addAll(el.enclosedElements)
             }
         }

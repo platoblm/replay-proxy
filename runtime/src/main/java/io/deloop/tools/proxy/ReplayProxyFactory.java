@@ -1,14 +1,14 @@
-package io.deloop.tools.references.replay;
+package io.deloop.tools.proxy;
 
 import static java.lang.String.format;
 
-public class ReplayReferenceFactory {
+public class ReplayProxyFactory {
 
-    public static final String GENERATED_CLASS_SUFFIX = "_ReplayReference";
+    public static final String GENERATED_CLASS_SUFFIX = "_ReplayProxy";
 
-    public static <T> Reference<T> createFor(Class<T> type) {
+    public static <T> ReplayProxy<T> createFor(Class<T> type) {
         T instance = (T) createReferenceInstance(type);
-        return (Reference<T>) instance;
+        return (ReplayProxy<T>) instance;
     }
 
     private static String expectedGeneratedClassName(Class<?> type) {
@@ -30,7 +30,7 @@ public class ReplayReferenceFactory {
 
     private static RuntimeException error(Class<?> type, Throwable e) {
         String message = format("Can't create a Replay Reference for %s. Have you annotated it with %s?",
-                type.getCanonicalName(), ReplayReference.class.getSimpleName());
+                type.getCanonicalName(), HasReplayProxy.class.getSimpleName());
 
         return new RuntimeException(message, e);
     }

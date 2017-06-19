@@ -60,7 +60,7 @@ publishing {
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', description())
-                root.appendNode('name', 'Replay Reference')
+                root.appendNode('name', 'Replay Proxy')
                 root.appendNode('url', webUrl)
                 root.children().last() + pomConfig
             }

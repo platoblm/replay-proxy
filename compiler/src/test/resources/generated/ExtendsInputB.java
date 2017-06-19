@@ -1,6 +1,6 @@
 package com.example;
 
-import io.deloop.tools.references.replay.ReplayAlways;
+import io.deloop.tools.proxy.ReplayAlways;
 
 interface SampleMiddle extends SampleBottom {
 

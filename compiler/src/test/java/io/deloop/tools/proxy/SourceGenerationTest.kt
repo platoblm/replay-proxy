@@ -1,10 +1,10 @@
-package io.deloop.tools.reference.replay
+package io.deloop.tools.proxy
 
 import com.google.testing.compile.CompilationSubject
 import com.google.testing.compile.CompilationSubject.assertThat
 import com.google.testing.compile.Compiler
 import com.google.testing.compile.JavaFileObjects
-import io.deloop.tools.reference.replay.helpers.MethodIdGenerator
+import io.deloop.tools.proxy.helpers.MethodIdGenerator
 import org.junit.Test
 
 class SourceGenerationTest {
@@ -13,7 +13,7 @@ class SourceGenerationTest {
         compiling("SimpleInput.java") {
             succeededWithoutWarnings()
             and()
-            generatedSourceFile("com/example/Sample_ReplayReference")
+            generatedSourceFile("com/example/Sample_ReplayProxy")
                     .hasSourceEquivalentTo(sourceFrom("SimpleOutput.java"))
         }
     }
@@ -22,7 +22,7 @@ class SourceGenerationTest {
         compiling("NestedInterfaceInput.java") {
             succeededWithoutWarnings()
             and()
-            generatedSourceFile("com/example/SampleNestedInterface_ReplayReference")
+            generatedSourceFile("com/example/SampleNestedInterface_ReplayProxy")
                     .hasSourceEquivalentTo(sourceFrom("NestedInterfaceOutput.java"))
         }
     }
@@ -31,14 +31,14 @@ class SourceGenerationTest {
         compiling("ExtendsInputA.java", "ExtendsInputB.java", "ExtendsInputC.java") {
             succeededWithoutWarnings()
             and()
-            generatedSourceFile("com/example/SampleTop_ReplayReference")
+            generatedSourceFile("com/example/SampleTop_ReplayProxy")
                     .hasSourceEquivalentTo(sourceFrom("ExtendsOutput.java"))
         }
     }
 
     private fun compiling(vararg files: String, block: CompilationSubject.() -> Unit) {
         assertThat(Compiler.javac()
-                .withProcessors(ReplayReferenceProcessor.forTests(EmptyGenerator()))
+                .withProcessors(ReplayProxyProcessor.forTests(EmptyGenerator()))
                 .compile(files.map { sourceFrom(it) }))
                 .block()
     }

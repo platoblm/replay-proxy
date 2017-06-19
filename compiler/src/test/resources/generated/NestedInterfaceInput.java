@@ -1,11 +1,11 @@
 package com.example;
 
-import io.deloop.tools.references.replay.ReplayReference;
+import io.deloop.tools.proxy.HasReplayProxy;
 
 class SampleOuter {
     public static class SampleNested {
 
-        @ReplayReference
+        @HasReplayProxy
         interface SampleNestedInterface {
 
             void doOnce();

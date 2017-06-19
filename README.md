@@ -7,7 +7,7 @@ Replay Reference
 An annotation processor, that given an interface creates a reference that makes the following succeed:
 
 ```
-@ReplayReference
+@ReplayProxy
 interface Example {
 
     @ReplayAlways
@@ -19,7 +19,7 @@ interface Example {
 @Mock Example first;
 @Mock Example second;
 
-Reference<Example> reference = ReplayReferenceFactory.createFor(Example.class)
+Reference<Example> reference = ReplayProxyFactory.createFor(Example.class)
 
 @Test public void shouldReplayCalls() {
       reference.get().doOnce();
@@ -50,7 +50,7 @@ Android Proguard
 ----------------
 Add this to your proguard-rules file
 
-    -keep class **ReplayReference { *; }
+    -keep class **ReplayProxy { *; }
 
 
 License

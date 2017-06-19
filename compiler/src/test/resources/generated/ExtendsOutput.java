@@ -1,10 +1,10 @@
 package com.example;
 
-import io.deloop.tools.references.replay.internal.BaseReplayReferenceImpl;
-import io.deloop.tools.references.replay.internal.Invocation;
+import io.deloop.tools.proxy.internal.BaseImpl;
+import io.deloop.tools.proxy.internal.Invocation;
 import java.lang.Override;
 
-public final class SampleTop_ReplayReference extends BaseReplayReferenceImpl<SampleTop> implements SampleTop {
+public final class SampleTop_ReplayProxy extends BaseImpl<SampleTop> implements SampleTop {
 
     @Override
     public void doOnceTop() {
