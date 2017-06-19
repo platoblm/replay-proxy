@@ -10,7 +10,7 @@ project.extra["publishing.description"] = "The annotation processor for replay-r
 apply {
     plugin("java-library")
     plugin("kotlin")
-    from("../publishing.gradle")
+    from("../gradle/publishing.gradle")
 }
 
 dependencies {

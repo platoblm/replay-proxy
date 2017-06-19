@@ -9,7 +9,7 @@ project.extra["publishing.description"] = "The runtime dependency for replay-ref
 
 apply {
     plugin("java-library")
-    from("../publishing.gradle")
+    from("../gradle/publishing.gradle")
 }
 
 dependencies {

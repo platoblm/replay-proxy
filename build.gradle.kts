@@ -22,7 +22,7 @@ allprojects {
     }
 }
 
-applyFrom("coverage.gradle")
+applyFrom("gradle/coverage.gradle")
 
 // to deploy run  ./gradlew clean build bintrayPublishAll
 tasks {
