@@ -4,12 +4,13 @@ import com.google.auto.service.AutoService;
 import io.deloop.tools.proxy.helpers.MethodIdGenerator;
 import io.deloop.tools.proxy.specs.FileGenerator;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,10 +23,7 @@ public class ReplayProxyProcessor extends AbstractProcessor {
         return new ReplayProxyProcessor(methodIdGenerator);
     }
 
-    private Types types;
-    private Elements elements;
-    private Filer filer;
-    private Messager messager;
+    private ProcessingEnvironment processingEnv;
     private final MethodIdGenerator idGenerator;
 
     public ReplayProxyProcessor() {
@@ -38,19 +36,15 @@ public class ReplayProxyProcessor extends AbstractProcessor {
 
     @Override public synchronized void init(ProcessingEnvironment env) {
         super.init(env);
-        types = env.getTypeUtils();
-        elements = env.getElementUtils();
-        filer = env.getFiler();
-        messager = env.getMessager();
+        processingEnv = env;
     }
 
     @Override public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
-        FileGenerator fileGenerator = new FileGenerator(elements, types, filer, messager, idGenerator);
+        FileGenerator fileGenerator = new FileGenerator(processingEnv, idGenerator);
 
         for (Element element : env.getElementsAnnotatedWith(CreateReplayProxy.class)) {
             fileGenerator.createFor(element);
         }
-
         return true;
     }
 

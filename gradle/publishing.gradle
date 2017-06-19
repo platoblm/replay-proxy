@@ -74,7 +74,7 @@ bintray {
     key = System.getenv('BINTRAY_API_KEY')
     publications = ['CommonPublication']
     publish = true
-    dryRun = true
+    dryRun = false
 
     pkg {
         repo = 'tools'

@@ -3,33 +3,28 @@ package io.deloop.tools.proxy.specs
 import com.squareup.javapoet.JavaFile
 import io.deloop.tools.proxy.helpers.MethodIdGenerator
 import io.deloop.tools.proxy.validation.Validator
-import javax.annotation.processing.Filer
-import javax.annotation.processing.Messager
+import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
-import javax.lang.model.util.Elements
-import javax.lang.model.util.Types
 
-class FileGenerator(private val elements: Elements,
-                    private val types: Types,
-                    private val filer: Filer,
-                    private val messager : Messager,
+class FileGenerator(private val env: ProcessingEnvironment,
                     private val methodIdGenerator: MethodIdGenerator) {
 
     fun createFor(input: Element) {
-        val isValid = Validator(input, types, messager).validate()
+        val isValid = Validator(env, input).validate()
         if (!isValid) {
             return
         }
 
-        val typeSpec = TypeSpecGenerator(input, elements, types, filer, methodIdGenerator)
-                .create()
+        val typeSpec = TypeSpecGenerator(input, env, methodIdGenerator)
+                .createSpec()
 
         JavaFile.builder(generatedPackage(input), typeSpec)
                 .build()
-                .writeTo(filer)
+                .writeTo(env.filer)
     }
 
-    private fun generatedPackage(input: Element) = elements
+    private fun generatedPackage(input: Element) = env
+            .elementUtils
             .getPackageOf(input)
             .qualifiedName
             .toString()

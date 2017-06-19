@@ -7,15 +7,17 @@ import io.deloop.tools.proxy.CreateReplayProxy
 import io.deloop.tools.proxy.ReplayAlways
 import java.lang.Exception
 import java.util.*
-import javax.annotation.processing.Messager
+import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind.INTERFACE
 import javax.lang.model.element.ElementKind.METHOD
 import javax.lang.model.type.TypeKind.VOID
-import javax.lang.model.util.Types
 import javax.tools.Diagnostic.Kind
 
-internal class Validator(private val element: Element, private val types: Types, private val messager: Messager) {
+internal class Validator(private val env: ProcessingEnvironment,
+                         private val element: Element) {
+
+    private val messager = env.messager
 
     fun validate() = try {
         checkIfCompiles()
@@ -30,7 +32,7 @@ internal class Validator(private val element: Element, private val types: Types,
 
     private fun checkIfCompiles() {
         if (!SuperficialValidation.validateElement(element)) {
-            warningCompilationErrors(element, messager)
+            warningCompilationErrors(element)
             fail()
         }
     }
@@ -78,6 +80,7 @@ internal class Validator(private val element: Element, private val types: Types,
     private fun isMethod(e: Element) = e.kind == METHOD
 
     private fun enclosedElements(): List<Element> {
+        val types = env.typeUtils
         val result = ArrayList<Element>()
         result.addAll(element.enclosedElements)
 
@@ -94,7 +97,7 @@ internal class Validator(private val element: Element, private val types: Types,
 
     private fun methodReturnsVoid(e: Element) = asExecutable(e).returnType.kind == VOID
 
-    private fun warningCompilationErrors(element: Element, messager: Messager) {
+    private fun warningCompilationErrors(element: Element) {
         messager.printMessage(Kind.WARNING, "Had compilation errors", element)
     }
 

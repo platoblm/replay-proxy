@@ -19,7 +19,7 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
     private val parameters = findListOfParameters(method)
     private val replayAlways = isAnnotationPresent(method, ReplayAlways::class.java)
 
-    fun generate(): MethodSpec = forwardToPaentSpec()
+    fun createSpec(): MethodSpec = forwardToPaentSpec()
                 .apply { addRecordBlock(this) }
                 .build()
 

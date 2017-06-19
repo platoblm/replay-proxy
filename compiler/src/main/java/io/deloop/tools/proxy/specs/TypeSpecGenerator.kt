@@ -8,7 +8,7 @@ import io.deloop.tools.proxy.ReplayProxyFactory.GENERATED_CLASS_SUFFIX
 import io.deloop.tools.proxy.helpers.MethodIdGenerator
 import io.deloop.tools.proxy.internal.BaseImpl
 import java.util.*
-import javax.annotation.processing.Filer
+import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind.INTERFACE
 import javax.lang.model.element.ExecutableElement
@@ -16,15 +16,15 @@ import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.TypeElement
 import javax.lang.model.util.ElementFilter.methodsIn
-import javax.lang.model.util.Elements
-import javax.lang.model.util.Types
 
-internal class TypeSpecGenerator(input: Element, private val elements: Elements, private val types: Types,
-                                 private val filer: Filer, private val methodIdGenerator: MethodIdGenerator) {
+internal class TypeSpecGenerator(input: Element,
+                                 env: ProcessingEnvironment,
+                                 private val methodIdGenerator: MethodIdGenerator) {
 
     private val inputInterface = input as TypeElement // the annotated interface
+    private val types = env.typeUtils
 
-    fun create() : TypeSpec {
+    fun createSpec() : TypeSpec {
         val newClassName = inputInterface.simpleName.toString() + GENERATED_CLASS_SUFFIX
 
         val inputTypeName = TypeName.get(inputInterface.asType())
@@ -62,6 +62,6 @@ internal class TypeSpecGenerator(input: Element, private val elements: Elements,
     private fun isInterface(el: Element)=  el.kind == INTERFACE
 
     private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(inputInterface, method, methodIdGenerator)
-                .generate()
+                .createSpec()
 
 }
