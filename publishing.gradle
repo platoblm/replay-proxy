@@ -12,16 +12,62 @@ def description() {
     project.ext.get("publishing.description")
 }
 
+def webUrl = "https://github.com/platoblm/replay-reference"
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+
+// Create the pom configuration:
+def pomConfig = {
+    licenses {
+        license {
+            name "Unlicense"
+            url "http://unlicense.org"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "platoblm"
+            name "Plato B"
+            email "plato.blm@gmail.com"
+        }
+    }
+
+    scm {
+        url webUrl
+    }
+}
+
+// Create the publication with the pom configuration:
 publishing {
     publications {
         CommonPublication(MavenPublication) {
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
             groupId = 'io.deloop.tools'
             artifactId = artifactName()
             version = project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', description())
+                root.appendNode('name', 'Replay Reference')
+                root.appendNode('url', webUrl)
+                root.children().last() + pomConfig
+            }
         }
     }
 }
+
 
 bintray {
     user = System.getenv('BINTRAY_USER')
@@ -35,7 +81,7 @@ bintray {
         userOrg = 'deloop'
         name = artifactName()
         desc = description()
-        websiteUrl = 'https://github.com/platoblm/replay-reference'
+        websiteUrl = webUrl
         vcsUrl = 'https://github.com/platoblm/replay-reference.git'
         licenses = ['Unlicense']
         publicDownloadNumbers = true
