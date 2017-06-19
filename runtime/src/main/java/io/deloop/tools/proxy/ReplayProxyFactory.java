@@ -30,7 +30,7 @@ public class ReplayProxyFactory {
 
     private static RuntimeException error(Class<?> type, Throwable e) {
         String message = format("Can't create a proxy for %s. Have you annotated it with %s?",
-                type.getCanonicalName(), HasReplayProxy.class.getSimpleName());
+                type.getCanonicalName(), CreateReplayProxy.class.getSimpleName());
 
         return new RuntimeException(message, e);
     }

@@ -2,8 +2,7 @@ package io.deloop.tools.proxy;
 
 import com.google.auto.service.AutoService;
 import io.deloop.tools.proxy.helpers.MethodIdGenerator;
-import io.deloop.tools.proxy.specs.TypeSpecGenerator;
-import io.deloop.tools.proxy.validation.Validator;
+import io.deloop.tools.proxy.specs.FileGenerator;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -11,9 +10,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static java.util.Collections.singletonList;
@@ -47,30 +44,21 @@ public class ReplayProxyProcessor extends AbstractProcessor {
         messager = env.getMessager();
     }
 
-    @Override public boolean process(Set<? extends TypeElement> set, RoundEnvironment environment) {
-        for (Element el : findRelevantInterfaces(environment)) {
-            new TypeSpecGenerator(el, elements, types, filer, idGenerator)
-                    .generateFile();
+    @Override public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
+        FileGenerator fileGenerator = new FileGenerator(elements, types, filer, messager, idGenerator);
+
+        for (Element element : env.getElementsAnnotatedWith(CreateReplayProxy.class)) {
+            fileGenerator.createFor(element);
         }
+
         return true;
     }
 
     @Override public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(singletonList(HasReplayProxy.class.getCanonicalName()));
+        return new HashSet<>(singletonList(CreateReplayProxy.class.getCanonicalName()));
     }
 
     @Override public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
-    }
-
-    private List<Element> findRelevantInterfaces(RoundEnvironment env) {
-        List<Element> result = new ArrayList<>();
-
-        for (Element element : env.getElementsAnnotatedWith(HasReplayProxy.class)) {
-            if (new Validator(element, types, messager).validate()) {
-                result.add(element);
-            }
-        }
-        return result;
     }
 }

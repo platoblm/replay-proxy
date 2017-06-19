@@ -8,5 +8,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Target({TYPE})
 @Retention(CLASS)
-public @interface HasReplayProxy {
+public @interface CreateReplayProxy {
 }

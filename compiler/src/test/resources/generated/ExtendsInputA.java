@@ -1,8 +1,8 @@
 package com.example;
 
-import io.deloop.tools.proxy.HasReplayProxy;
+import io.deloop.tools.proxy.CreateReplayProxy;
 
-@HasReplayProxy
+@CreateReplayProxy
 interface SampleTop extends SampleMiddle {
 
     void doOnceTop();

@@ -3,7 +3,7 @@ package io.deloop.tools.proxy.validation
 import com.google.auto.common.MoreElements.asExecutable
 import com.google.auto.common.MoreElements.isAnnotationPresent
 import com.google.auto.common.SuperficialValidation
-import io.deloop.tools.proxy.HasReplayProxy
+import io.deloop.tools.proxy.CreateReplayProxy
 import io.deloop.tools.proxy.ReplayAlways
 import java.lang.Exception
 import java.util.*
@@ -37,7 +37,7 @@ internal class Validator(private val element: Element, private val types: Types,
 
     private fun checkIfInterface() {
         if (element.kind != INTERFACE) {
-            val annotation = HasReplayProxy::class.java.simpleName
+            val annotation = CreateReplayProxy::class.java.simpleName
             error(element, "$annotation can only be applied to interfaces")
             fail()
         }

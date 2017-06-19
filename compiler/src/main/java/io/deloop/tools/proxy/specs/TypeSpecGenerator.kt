@@ -1,10 +1,12 @@
 package io.deloop.tools.proxy.specs
 
-import com.squareup.javapoet.*
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.TypeSpec
 import io.deloop.tools.proxy.ReplayProxyFactory.GENERATED_CLASS_SUFFIX
 import io.deloop.tools.proxy.helpers.MethodIdGenerator
 import io.deloop.tools.proxy.internal.BaseImpl
-import java.io.IOException
 import java.util.*
 import javax.annotation.processing.Filer
 import javax.lang.model.element.Element
@@ -22,7 +24,7 @@ internal class TypeSpecGenerator(input: Element, private val elements: Elements,
 
     private val inputInterface = input as TypeElement // the annotated interface
 
-    fun generateFile() {
+    fun create() : TypeSpec {
         val newClassName = inputInterface.simpleName.toString() + GENERATED_CLASS_SUFFIX
 
         val inputTypeName = TypeName.get(inputInterface.asType())
@@ -37,16 +39,9 @@ internal class TypeSpecGenerator(input: Element, private val elements: Elements,
                 .map { methodSpecFor(it) }
                 .forEach{ typeSpec.addMethod(it) }
 
-        JavaFile
-                .builder(generatedPackage(), typeSpec.build())
-                .build()
-                .writeFile()
-    }
 
-    private fun generatedPackage() = elements
-                .getPackageOf(inputInterface)
-                .qualifiedName
-                .toString()
+        return typeSpec.build()
+    }
 
     private fun allMethodsToBeImplemented(): List<ExecutableElement> {
         val enclosedElements = ArrayList<Element>()
@@ -69,12 +64,4 @@ internal class TypeSpecGenerator(input: Element, private val elements: Elements,
     private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(inputInterface, method, methodIdGenerator)
                 .generate()
 
-    private fun JavaFile.writeFile() {
-        try {
-            writeTo(filer)
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
-
-    }
 }

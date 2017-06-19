@@ -1,9 +1,9 @@
 package com.example;
 
 import io.deloop.tools.proxy.ReplayAlways;
-import io.deloop.tools.proxy.HasReplayProxy;
+import io.deloop.tools.proxy.CreateReplayProxy;
 
-@HasReplayProxy
+@CreateReplayProxy
 interface Sample {
 
     @ReplayAlways

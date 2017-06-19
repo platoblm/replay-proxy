@@ -1,8 +1,8 @@
 package mypackage;
 
-import io.deloop.tools.proxy.HasReplayProxy;
+import io.deloop.tools.proxy.CreateReplayProxy;
 
-@HasReplayProxy
+@CreateReplayProxy
 interface Giraffe extends mypackage.BaseAnimal {
 
     void validMethod();

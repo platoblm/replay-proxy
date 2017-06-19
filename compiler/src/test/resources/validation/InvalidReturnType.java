@@ -1,6 +1,6 @@
-import io.deloop.tools.proxy.HasReplayProxy;
+import io.deloop.tools.proxy.CreateReplayProxy;
 
-@HasReplayProxy
+@CreateReplayProxy
 interface InvalidMethodReturnType {
 
     String methodA();
