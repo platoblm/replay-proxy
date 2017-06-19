@@ -1,0 +1,23 @@
+machine:
+  timezone:
+    Europe/London
+  java:
+    version:
+      oraclejdk8
+
+general:
+  branches:
+    only:
+      - master
+  artifacts:
+    - "compiler/build/reports/tests"
+    - "compiler-integration-tests/build/reports/tests/test"
+
+test:
+  override:
+    - ./gradlew test -is
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
+    - bash <(curl -s https://codecov.io/bash)
