@@ -1,6 +1,16 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies { classpath(extra["dependencies.bintray"]) }
+}
+
+project.extra["publishing.artifact"] = "replay-reference-compiler"
+project.extra["publishing.description"] = "The annotation processor for replay-reference. " +
+        "You need to add the 'replay-reference' runtime dependency too."
+
 apply {
     plugin("java-library")
     plugin("kotlin")
+    from("../publishing.gradle")
 }
 
 dependencies {
@@ -18,4 +28,3 @@ dependencies {
             "org.checkerframework:compiler:2.1.5" /* workaround for ClassNotFoundException: com.sun.source.util.TreeScanner */)
             .forEach { testCompile(it) }
 }
-

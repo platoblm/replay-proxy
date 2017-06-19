@@ -1,0 +1,50 @@
+// not in kotlin script because of issues with the bintray plugin
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven"
+apply plugin: "maven-publish"
+
+
+def artifactName() {
+    project.ext.get("publishing.artifact")
+}
+
+def description() {
+    project.ext.get("publishing.description")
+}
+
+publishing {
+    publications {
+        CommonPublication(MavenPublication) {
+            from components.java
+            groupId = 'io.deloop.tools'
+            artifactId = artifactName()
+            version = project.version
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
+    publications = ['CommonPublication']
+    publish = true
+    dryRun = false
+
+    pkg {
+        repo = 'tools'
+        userOrg = 'deloop'
+        name = artifactName()
+        desc = description()
+        websiteUrl = 'https://github.com/platoblm/replay-reference'
+        vcsUrl = 'https://github.com/platoblm/replay-reference.git'
+        licenses = ['Unlicense']
+        publicDownloadNumbers = true
+        version {
+            released = new Date()
+            name = project.version
+            vcsTag = project.version
+        }
+    }
+}
+
+
