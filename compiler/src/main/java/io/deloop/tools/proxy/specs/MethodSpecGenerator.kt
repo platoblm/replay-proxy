@@ -13,7 +13,7 @@ import javax.lang.model.element.TypeElement
 
 internal class MethodSpecGenerator(inputInterface: TypeElement,
                                    private val method: ExecutableElement,
-                                   private val methodIdGenerator: MethodIdGenerator) {
+                                   private val idGenerator: MethodIdGenerator) {
 
     private val inputInterface = ClassName.get(inputInterface)
     private val parameters = findListOfParameters(method)
@@ -65,7 +65,7 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
 
     private fun uniqueMethodId(): String {
         val methodName = method.simpleName.toString()
-        return methodIdGenerator.uniqueId(methodName)
+        return idGenerator.uniqueId(methodName)
     }
 
     private fun argumentsList() = parameters.map { it.name }.joinToString()

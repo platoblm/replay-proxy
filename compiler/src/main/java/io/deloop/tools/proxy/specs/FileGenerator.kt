@@ -7,23 +7,22 @@ import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 
 class FileGenerator(private val env: ProcessingEnvironment,
-                    private val methodIdGenerator: MethodIdGenerator) {
+                    private val idGenerator: MethodIdGenerator) {
 
     fun createFor(input: Element) {
-        val isValid = Validator(env, input).validate()
-        if (!isValid) {
+        if (!Validator(env, input).isValid()) {
             return
         }
 
-        val typeSpec = TypeSpecGenerator(input, env, methodIdGenerator)
+        val typeSpec = TypeSpecGenerator(input, env, idGenerator)
                 .createSpec()
 
-        JavaFile.builder(generatedPackage(input), typeSpec)
+        JavaFile.builder(packageOf(input), typeSpec)
                 .build()
                 .writeTo(env.filer)
     }
 
-    private fun generatedPackage(input: Element) = env
+    private fun packageOf(input: Element) = env
             .elementUtils
             .getPackageOf(input)
             .qualifiedName

@@ -19,7 +19,7 @@ internal class Validator(private val env: ProcessingEnvironment,
 
     private val messager = env.messager
 
-    fun validate() = try {
+    fun isValid() = try {
         checkIfCompiles()
         checkIfInterface()
         checkIfItHasOnlyVoidMethods()
