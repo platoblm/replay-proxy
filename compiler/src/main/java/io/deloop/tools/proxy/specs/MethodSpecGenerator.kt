@@ -6,16 +6,18 @@ import com.squareup.javapoet.MethodSpec.Builder
 import io.deloop.tools.proxy.ReplayAlways
 import io.deloop.tools.proxy.helpers.MethodIdGenerator
 import io.deloop.tools.proxy.internal.Invocation
+import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 
-internal class MethodSpecGenerator(inputInterface: TypeElement,
+class MethodSpecGenerator(inputInterface: Element,
                                    private val method: ExecutableElement,
                                    private val idGenerator: MethodIdGenerator) {
 
-    private val inputInterface = ClassName.get(inputInterface)
+    private val inputInterface = ClassName.get(inputInterface as TypeElement)
     private val parameters = findListOfParameters(method)
     private val replayAlways = isAnnotationPresent(method, ReplayAlways::class.java)
 
@@ -71,9 +73,12 @@ internal class MethodSpecGenerator(inputInterface: TypeElement,
     private fun argumentsList() = parameters.map { it.name }.joinToString()
 
     private fun findListOfParameters(method: ExecutableElement) = method.parameters
-            .map {
-                val paramType = TypeName.get(it.asType())
-                val paramName = it.simpleName.toString()
-                ParameterSpec.builder(paramType, paramName, FINAL).build()
-            }.toList()
+            .map { parameterSpec(it) }
+            .toList()
+
+    private fun parameterSpec(element: VariableElement): ParameterSpec {
+        val paramType = TypeName.get(element.asType())
+        val paramName = element.simpleName.toString()
+        return ParameterSpec.builder(paramType, paramName, FINAL).build()
+    }
 }

@@ -14,10 +14,9 @@ import javax.lang.model.element.ElementKind.INTERFACE
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
-import javax.lang.model.element.TypeElement
 import javax.lang.model.util.ElementFilter.methodsIn
 
-internal class TypeSpecGenerator(private val input: Element,
+class TypeSpecGenerator(private val input: Element,
                                  env: ProcessingEnvironment,
                                  private val methodIdGenerator: MethodIdGenerator) {
 
@@ -37,7 +36,6 @@ internal class TypeSpecGenerator(private val input: Element,
         allMethodsToBeImplemented()
                 .map { methodSpecFor(it) }
                 .forEach{ typeSpec.addMethod(it) }
-
 
         return typeSpec.build()
     }
@@ -60,7 +58,6 @@ internal class TypeSpecGenerator(private val input: Element,
 
     private fun isInterface(el: Element)=  el.kind == INTERFACE
 
-    private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(input as TypeElement, method, methodIdGenerator)
+    private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(input, method, methodIdGenerator)
                 .createSpec()
-
 }
