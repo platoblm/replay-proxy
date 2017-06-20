@@ -3,7 +3,8 @@ Replay Proxy
 
 [![circleci](https://circleci.com/gh/platoblm/replay-proxy.svg?style=shield)](https://circleci.com/gh/platoblm/replay-proxy)
 [![codecov.io](http://codecov.io/github/platoblm/replay-proxy/coverage.svg)](https://codecov.io/gh/platoblm/replay-proxy)
-
+[![download](https://api.bintray.com/packages/deloop/tools/replay-proxy/images/download.svg)](https://bintray.com/deloop/tools/replay-proxy/_latestVersion)
+ 
 Uses an annotation processor, to create proxy instances of an interface, that can record and replay calls 
 on a targets that implement that interface, as shown in
 ```
