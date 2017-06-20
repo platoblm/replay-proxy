@@ -4,47 +4,58 @@ Replay Proxy
 [![circleci](https://circleci.com/gh/platoblm/replay-proxy.svg?style=shield)](https://circleci.com/gh/platoblm/replay-proxy)
 [![codecov.io](http://codecov.io/github/platoblm/replay-proxy/coverage.svg)](https://codecov.io/gh/platoblm/replay-proxy)
 
-An annotation processor, that given an interface creates a proxy that makes the following succeed:
-
+Uses an annotation processor, to create proxy instances of an interface, that can record and replay calls 
+on a targets that implement that interface, as shown in
 ```
-@HasReplayProxy
-interface Example {
-
+@CreateReplayProxy
+interface MyView {
+  
     @ReplayAlways
-    void doAlways(String state);
-
-    void doOnce();
+    void update(String state);
+  
+    void exit();
 }
-
-@Mock Example first;
-@Mock Example second;
-
-ReplayProxy<Example> proxy = ReplayProxyFactory.createFor(Example.class)
-
+  
+@Mock MyView first;
+@Mock MyView second;
+  
+ReplayProxy<MyView> proxy = ReplayProxyFactory.createFor(MyView.class)
+  
 @Test public void shouldReplayCalls() {
-      proxy.get().doOnce();
-
+      // target missing
+      proxy.get().exit();
+  
       proxy.setTarget(first);
-      verify(first).doOnce();
-
-      proxy.get().doAlways("loading");
-      verify(first).doAlways("loading");
-
+      verify(first).exit();
+  
+      proxy.get().update("loading");
+      verify(first).update("loading");
+  
       proxy.setTarget(second);
-      verify(second).doAlways("loading");
-      verify(second, never()).doOnce();
+      verify(second).update("loading");
+      verify(second, never()).exit();
 }
 ```
 
-[Read this](compiler-integration-tests/src/test/java/com/example/BasicTest.kt) for more details: 
+[Check this](compiler-integration-tests/src/test/java/com/example/BasicTest.kt) for more details: 
 
 The created proxy:
-- Forwards method invocations to its target if one is present.
-- Records invocations if the target is missing, and replays them later, when a target is set.
-- Exposes a proxy and never the target itself.
 - Holds a weak reference to the target.
+- Forwards method invocations to its target when present.
+- Records invocations if the target is missing, and replays them later, when a target is set.
+- Exposes a proxy and never a reference to the target itself.
 - Records and replays only the last invocation of each method.
-- Always replays the last invocation of the method that is annotated with ReplayAlways (optional).
+- Always replays a method that is annotated with ReplayAlways, when a target is set.
+
+Use case
+--------
+Our use case comes from developing on Android. We use a replay proxy to hold a reference to the 
+View (Activity, Fragment) in our MVP architecture. This helps address the lifecycle issues of the View, which at times, 
+is destroyed and recreated by the system. 
+ 
+We first used reflection and Java's Proxy and InvocationHandler classes, and then this annotation processor to 
+generate the needed classes and avoid reflection. 
+
 
 Android Proguard
 ----------------
