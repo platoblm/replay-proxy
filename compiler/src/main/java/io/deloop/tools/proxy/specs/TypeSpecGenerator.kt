@@ -17,17 +17,16 @@ import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.TypeElement
 import javax.lang.model.util.ElementFilter.methodsIn
 
-internal class TypeSpecGenerator(input: Element,
+internal class TypeSpecGenerator(private val input: Element,
                                  env: ProcessingEnvironment,
                                  private val methodIdGenerator: MethodIdGenerator) {
 
-    private val inputInterface = input as TypeElement // the annotated interface
     private val types = env.typeUtils
 
     fun createSpec() : TypeSpec {
-        val newClassName = inputInterface.simpleName.toString() + GENERATED_CLASS_SUFFIX
+        val newClassName = input.simpleName.toString() + GENERATED_CLASS_SUFFIX
 
-        val inputTypeName = TypeName.get(inputInterface.asType())
+        val inputTypeName = TypeName.get(input.asType())
         val parentClassName = ClassName.get(BaseImpl::class.java)
 
         val typeSpec = TypeSpec.classBuilder(newClassName)
@@ -45,7 +44,7 @@ internal class TypeSpecGenerator(input: Element,
 
     private fun allMethodsToBeImplemented(): List<ExecutableElement> {
         val enclosedElements = ArrayList<Element>()
-        addEnclosedElementsOf(inputInterface, enclosedElements)
+        addEnclosedElementsOf(input, enclosedElements)
         return methodsIn(enclosedElements)
     }
 
@@ -61,7 +60,7 @@ internal class TypeSpecGenerator(input: Element,
 
     private fun isInterface(el: Element)=  el.kind == INTERFACE
 
-    private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(inputInterface, method, methodIdGenerator)
+    private fun methodSpecFor(method: ExecutableElement)= MethodSpecGenerator(input as TypeElement, method, methodIdGenerator)
                 .createSpec()
 
 }

@@ -1,12 +1,15 @@
 package com.example
 
 import io.deloop.tools.proxy.ReplayProxyFactory
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
+import java.lang.NullPointerException
 
 @RunWith(MockitoJUnitRunner::class)
 class BasicTest {
@@ -14,6 +17,8 @@ class BasicTest {
     @Mock lateinit var target: Example
     @Mock lateinit var first: Example
     @Mock lateinit var second: Example
+
+    @JvmField @Rule val expectedException = ExpectedException.none()
 
     val proxy = ReplayProxyFactory.createFor(Example::class.java)
 
@@ -111,5 +116,16 @@ class BasicTest {
         }
 
         verify(target, never()).doOnceA()
+    }
+
+    @Test fun shouldCheckForNull() {
+        expectedException.expect(NullPointerException::class.java)
+        proxy.setTarget(null)
+    }
+
+    @Test fun shouldFailIfAnnotationMissing() {
+        expectedException.expect(RuntimeException::class.java)
+        expectedException.expectMessage("Have you annotated it with CreateReplayProxy?")
+        ReplayProxyFactory.createFor(Runnable::class.java)
     }
 }
